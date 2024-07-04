@@ -16,6 +16,9 @@ import '../screens/manage_questions_screen.dart';
 import '../screens/my_themes_screen.dart';
 import '../screens/create_theme_screen.dart';
 import '../screens/welcome_screen.dart';
+import '../screens/add_truth.dart';
+import '../screens/add_dare.dart';
+import '../screens/instruction_for_app.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -33,8 +36,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => TruthOrDareScreen());
     case '/truth':
       return MaterialPageRoute(builder: (_) => TruthPage());
+    case '/add_truth':
+      return MaterialPageRoute(builder: (_) => addTruthScreen());
     case '/dare':
       return MaterialPageRoute(builder: (_) => DarePage());
+    case '/add_dare':
+      return MaterialPageRoute(builder: (_) => addDareScreen());
     case '/admin':
       return MaterialPageRoute(builder: (_) => AdminScreen());
     case '/manage_questions':
@@ -51,6 +58,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => ChangePictureScreen());
     case '/history':
       return MaterialPageRoute(builder: (_) => HistoryScreen());
+    case '/instructions_for_app':
+      return MaterialPageRoute(builder: (_) => instructionScreen());
 
 
     default:

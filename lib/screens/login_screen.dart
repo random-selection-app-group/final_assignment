@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
             shadows: [
               Shadow(
                 offset: Offset(2, 2),
-                blurRadius: 4,
+                blurRadius: 4, //边框圆角
                 color: Colors.black.withOpacity(0.5),
               ),
             ],
@@ -77,10 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
               CustomButton(
                 text: '登录',
                 onPressed: () async {
-                  if (_formKey.currentState?.validate() ?? false) {
+                  if (_formKey.currentState?.validate() ?? false) { //检查表单是否有效
                     bool success = await Provider.of<AuthState>(context,
                             listen: false)
-                        .login(
+                        .login( //传入用户名和密码尝试登录
                             _usernameController.text, _passwordController.text);
                     if (success) {
                       Navigator.pushReplacementNamed(context, '/home');

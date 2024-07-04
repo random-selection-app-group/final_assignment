@@ -15,8 +15,8 @@ class CreateThemeScreen extends StatefulWidget {
 }
 
 class _CreateThemeScreenState extends State<CreateThemeScreen> {
-  final _themeNameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _themeNameController = TextEditingController(); //主题名称
+  final _descriptionController = TextEditingController(); //选择
   final List<TextEditingController> _optionControllers = [];
 
   @override

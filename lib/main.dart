@@ -36,8 +36,6 @@ class MyApp extends StatelessWidget {
 }
 
 
-
-
 /*  auth_state中
 使用 ChangeNotifier：AuthState 类继承了 ChangeNotifier，这意味着可以向其监听者（通常是界面组件）发送通知，以便在状态发生变化时更新界面。
 

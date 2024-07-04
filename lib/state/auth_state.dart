@@ -6,9 +6,9 @@ class AuthState with ChangeNotifier {
   String? _username;
   String? _avatarPath;
   bool _isLoggedIn;
-  bool _isAdmin;
-  List<Map<String, dynamic>> _userLogins;
-
+  bool _isAdmin; 
+  List<Map<String, dynamic>> _userLogins;  //dynamic值可为任意类型
+  
   AuthState()
       : _isLoggedIn = false,
         _isAdmin = false,
@@ -23,11 +23,12 @@ class AuthState with ChangeNotifier {
   List<Map<String, dynamic>> get userLogins => _userLogins;
 
   Future<void> _loadUser() async {
+    //获得实例，读取数据
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _username = prefs.getString('username');
     _avatarPath = prefs.getString('avatarPath');
     _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    _isAdmin = _username == 'admin';
+    _isAdmin = _username == 'admin'; //???这里需要修改一下
 
     List<String>? userLoginsList = prefs.getStringList('userLogins');
     if (userLoginsList != null) {
@@ -36,11 +37,11 @@ class AuthState with ChangeNotifier {
           .toList();
     }
 
-    notifyListeners();
+    notifyListeners(); //通知监听器
   }
 
   Future<void> register(String username, String password) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance(); 
     await prefs.setString(username, password);
   }
 
@@ -93,11 +94,11 @@ class AuthState with ChangeNotifier {
 
   Future<List<Map<String, String>>> getAllUsers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Set<String> keys = prefs.getKeys();
+    Set<String> keys = prefs.getKeys(); //获取 SharedPreferences 中所有的键
     List<Map<String, String>> users = [];
     for (var key in keys) {
-      if (key != 'username' && key != 'isLoggedIn' && key != 'userLogins') {
-        users.add({key: prefs.getString(key) ?? ''});
+      if (key != 'username' && key != 'isLoggedIn' && key != 'truthQuestions' && key != 'userLogins') {
+        users.add({key: prefs.getString(key) ?? ' '});//if判定条件有问题
       }
     }
     return users;

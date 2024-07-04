@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TruthOrDareState with ChangeNotifier {
   late List<Map<String, String>> _truthQuestions;
   late List<Map<String, String>> _dareChallenges;
+
 
   TruthOrDareState() {
     _truthQuestions = [];
@@ -26,13 +28,37 @@ class TruthOrDareState with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTruthQuestion(Map<String, String> question) async {
-    _truthQuestions.add(question);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-        'truthQuestions', _truthQuestions.map((q) => jsonEncode(q)).toList());
+  Future<void> writeTruthCounter(String counter) async { //写入数据到truth.txt文件中
+    final file = await File('assets/truth.txt');
+    final sink = file.openWrite(mode: FileMode.append);
+    sink.write('\n$counter');
+    await sink.close();
+  }
+
+  void addTruthQuestion(String counter) {
+    writeTruthCounter(counter);
     notifyListeners();
   }
+
+  Future<void> writeDareCounter(String counter) async { //可写入数据到dare.txt文件中
+    final file = await File('assets/dare.txt');
+    final sink = file.openWrite(mode: FileMode.append);
+    sink.write('\n$counter');
+    await sink.close();
+  }
+
+  void addDareQuestion(String counter) {
+    writeDareCounter(counter);
+    notifyListeners();
+  }
+
+  // Future<void> addTruthQuestion(Map<String, String> question) async {
+  //   _truthQuestions.add(question);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setStringList(
+  //       'truthQuestions', _truthQuestions.map((q) => jsonEncode(q)).toList());
+  //   notifyListeners();
+  // }
 
   Future<void> addDareChallenge(Map<String, String> challenge) async {
     _dareChallenges.add(challenge);
@@ -57,6 +83,7 @@ class TruthOrDareState with ChangeNotifier {
         'dareChallenges', _dareChallenges.map((d) => jsonEncode(d)).toList());
     notifyListeners();
   }
+
 }
 /*初始化状态：在构造函数中，真心话和大冒险的列表被初始化为空列表，然后调用 _loadState 方法从 SharedPreferences 中加载保存的真心话和大冒险列表。
 

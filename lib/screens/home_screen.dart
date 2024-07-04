@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
-                    // 第一个按钮
+                    // 第一个按钮-治好你的选择困难症
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    // 第二个按钮
+                    // 第二个按钮-真心话大冒险
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/truth_or_dare');
@@ -132,14 +132,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
                     if (authState.isAdmin) ...[
                       SizedBox(height: 20),
+                      // 第三个按钮-管理员面板
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/admin');
                         },
-                        child: Text('管理员面板'),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.person_pin_circle_sharp,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              '管理员面板',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Color.fromARGB(255, 25, 125, 255),
+                          backgroundColor: Color.fromARGB(255, 183, 220, 255),
+                          minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ],
                   ],

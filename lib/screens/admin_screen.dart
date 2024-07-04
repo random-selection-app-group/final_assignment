@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/auth_state.dart';
+import '../components/custom_button.dart';
 
 class AdminScreen extends StatelessWidget {
   @override
@@ -40,18 +41,19 @@ class AdminScreen extends StatelessWidget {
           ),
         ),
       ),
-      backgroundColor: Color.fromARGB(226, 240, 254, 255),
+      backgroundColor: Color.fromARGB(255, 226, 240, 254),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            CustomButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/manage_questions');
               },
-              child: Text('管理问题'),
+              text: '管理问题',
             ),
-            ElevatedButton(
+            SizedBox(height: 20),
+            CustomButton(
               onPressed: () async {
                 List<Map<String, String>> users = await authState.getAllUsers();
                 showDialog(
@@ -72,7 +74,14 @@ class AdminScreen extends StatelessWidget {
                   },
                 );
               },
-              child: Text('查看用户'),
+              text:'查看用户',
+            ),
+            SizedBox(height: 20),
+            CustomButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/instructions_for_app');
+              },
+              text: '软件说明',
             ),
           ],
         ),
