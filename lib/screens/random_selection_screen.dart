@@ -39,7 +39,6 @@ class RandomChoiceScreen extends StatelessWidget {
       ),
       backgroundColor: Color.fromARGB(255, 226, 240, 254),
       body: Center(
-        
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -60,7 +59,6 @@ class RandomChoiceScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                // 按钮
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -110,37 +108,6 @@ class RandomChoiceScreen extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         '我的主题',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                    minimumSize: Size(double.infinity, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/history'); // 历史记录按钮点击事件
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.history,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        '历史记录',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

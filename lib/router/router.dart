@@ -1,5 +1,4 @@
 import 'package:dod1/screens/change_name_screen.dart';
-import 'package:dod1/screens/change_picture_screen.dart';
 import 'package:dod1/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -54,8 +53,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => WelcomeScreen());
     case '/change_nickname':
       return MaterialPageRoute(builder: (_) => ChangeNameScreen());
-    case '/change_avatar':
-      return MaterialPageRoute(builder: (_) => ChangePictureScreen());
     case '/history':
       return MaterialPageRoute(builder: (_) => HistoryScreen());
     case '/instructions_for_app':

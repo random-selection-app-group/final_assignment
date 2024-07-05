@@ -1,9 +1,8 @@
-import 'package:dod1/screens/RoulettePage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
-import '../components/WheelOfFortuneScreen.dart'; // 导入转盘页面
 import '../components/custom_button.dart';
+import 'RoulettePage.dart';
 
 class CreateThemeScreen extends StatefulWidget {
   final int? themeIndex;
@@ -15,8 +14,8 @@ class CreateThemeScreen extends StatefulWidget {
 }
 
 class _CreateThemeScreenState extends State<CreateThemeScreen> {
-  final _themeNameController = TextEditingController(); //主题名称
-  final _descriptionController = TextEditingController(); //选择
+  final _themeNameController = TextEditingController(); // 主题名称
+  final _descriptionController = TextEditingController(); // 描述
   final List<TextEditingController> _optionControllers = [];
 
   @override
@@ -111,38 +110,40 @@ class _CreateThemeScreenState extends State<CreateThemeScreen> {
         ),
       ),
       backgroundColor: Color.fromARGB(255, 226, 240, 254),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _themeNameController,
-              decoration: InputDecoration(
-                labelText: '主题名称，例如：聚餐',
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _themeNameController,
+                decoration: InputDecoration(
+                  labelText: '主题名称，例如：聚餐',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: '描述，例如：今天吃什么',
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+              SizedBox(height: 10),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: '描述，例如：今天吃什么',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
+                maxLines: 3,
               ),
-              maxLines: 3,
-            ),
-            SizedBox(height: 10),
-            Text('选项设置', style: TextStyle(fontWeight: FontWeight.bold)),
-            Expanded(
-              child: ListView.builder(
+              SizedBox(height: 10),
+              Text('选项设置', style: TextStyle(fontWeight: FontWeight.bold)),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: _optionControllers.length,
                 itemBuilder: (context, index) {
                   return Padding(
@@ -171,22 +172,23 @@ class _CreateThemeScreenState extends State<CreateThemeScreen> {
                   );
                 },
               ),
-            ),
-            CustomButton(
-              onPressed: _addOption,
-              text: '添加选项',
-            ),
-            SizedBox(height: 10),
-            CustomButton(
-              onPressed: _startChoosing,
-              text: '开始选择',
-            ),
-            SizedBox(height: 10),
-            CustomButton(
-              onPressed: _saveTheme,
-              text: '保存到 “我的主题”',
-            ),
-          ],
+              CustomButton(
+                onPressed: _addOption,
+                text: '添加选项',
+              ),
+              SizedBox(height: 10),
+              CustomButton(
+                onPressed: _startChoosing,
+                text: '开始选择',
+              ),
+              SizedBox(height: 10),
+              CustomButton(
+                onPressed: _saveTheme,
+                text: '保存到 “我的主题”',
+              ),
+              SizedBox(height: 80), // 确保底部内容不被键盘遮挡
+            ],
+          ),
         ),
       ),
     );

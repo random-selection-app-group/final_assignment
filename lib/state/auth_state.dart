@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,9 +7,9 @@ class AuthState with ChangeNotifier {
   String? _username;
   String? _avatarPath;
   bool _isLoggedIn;
-  bool _isAdmin; 
+  bool _isAdmin;
   List<Map<String, dynamic>> _userLogins;  //dynamic值可为任意类型
-  
+
   AuthState()
       : _isLoggedIn = false,
         _isAdmin = false,
@@ -41,7 +42,7 @@ class AuthState with ChangeNotifier {
   }
 
   Future<void> register(String username, String password) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance(); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(username, password);
   }
 
@@ -116,6 +117,12 @@ class AuthState with ChangeNotifier {
     _avatarPath = avatarPath;
     await prefs.setString('avatarPath', avatarPath);
     notifyListeners();
+  }
+
+  // 新增方法：更新头像
+  void updateAvatar(String imagePath) {
+    _avatarPath = imagePath;
+    notifyListeners(); // Notify listeners that avatar path has changed
   }
 }
 

@@ -1,8 +1,11 @@
-import 'package:dod1/components/custom_button.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../state/auth_state.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../state/auth_state.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -11,15 +14,34 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _imagePicker = ImagePicker();
-  late ImageProvider<Object> _avatarImage; // 添加_avatarImage变量
+  ImageProvider<Object>? _avatarImage; // 修改类型为 ImageProvider<Object>?
 
-  _ProfileScreenState() {
-    _avatarImage = AssetImage('images/vv.jpg'); // 初始化_avatarImage变量
+  @override
+  void initState() {
+    super.initState();
+    _loadPrefs(); // 初始化时加载图片路径
   }
 
-  void updateAvatar(String imagePath) {
+  Future<void> _loadPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? imagePath = prefs.getString('imagePath');
     setState(() {
-      _avatarImage = AssetImage(imagePath);
+      if (imagePath != null && imagePath.isNotEmpty) {
+        _avatarImage = FileImage(File(imagePath)); // 使用 FileImage 加载图片
+      } else {
+        _avatarImage = AssetImage('images/vv.jpg'); // 默认头像
+      }
+    });
+  }
+
+  Future<void> _saveImagePath(String imagePath) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('imagePath', imagePath);
+  }
+
+  void _updateSelectedImage(File image) {
+    setState(() {
+      _avatarImage = FileImage(image); // 更新头像图片
     });
   }
 
@@ -34,22 +56,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Container(
             padding: EdgeInsets.all(20),
-            //color: Colors.blue, // 蓝色背景
             child: Row(
               children: [
                 CircleAvatar(
-                  // 用户头像
-                  backgroundImage: _avatarImage ?? AssetImage('images/vv.jpg'),
-                  // 从本地加载头像图片，如果没有则使用默认头像
+                  backgroundImage: _avatarImage, // 显示头像
                   radius: 50,
                 ),
                 SizedBox(width: 20),
                 Expanded(
                   child: Text(
-                    '用户名: ${authState.username}',
+                    '用户名: ${authState.username}', // 显示用户名
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24, // 增大字体大小
+                      fontSize: 24,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -72,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Icon(
                           Icons.keyboard,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -80,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -88,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 25, 125, 255),
                       backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                      minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -97,10 +116,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      final pickedFile = await _imagePicker.pickImage(
-                          source: ImageSource.gallery);
+                      final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
                       if (pickedFile != null) {
-                        updateAvatar('images/${pickedFile.name}'); // 更新头像图片
+                        _updateSelectedImage(File(pickedFile.path)); // 更新头像
+                        _saveImagePath(pickedFile.path); // 保存头像路径
                       }
                     },
                     child: Row(
@@ -108,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Icon(
                           Icons.mms,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -116,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -124,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 25, 125, 255),
                       backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                      minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -140,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Icon(
                           Icons.password,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -148,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -156,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 25, 125, 255),
                       backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                      minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -165,14 +184,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/history'); // 历史记录按钮点击事件
+                      Navigator.pushNamed(context, '/history');
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.history,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -180,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -188,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 25, 125, 255),
                       backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                      minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -197,15 +216,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.exit_to_app,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -213,7 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -221,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 25, 125, 255),
                       backgroundColor: Color.fromARGB(255, 183, 220, 255),
-                      minimumSize: Size(double.infinity, 60), // 设置按钮的最小尺寸
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
