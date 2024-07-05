@@ -27,7 +27,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
             TextButton(
               onPressed: () async {
                 // 在此处实现修改昵称的逻辑
-                await Provider.of<AuthState>(context, listen: false).setUsername(newName);
+                await Provider.of<AuthState>(context, listen: false).setNickname(newName);
                 Navigator.of(context).pop(); // 关闭对话框
                  Navigator.of(context).pop(); // 返回上一个页面
               },
@@ -82,7 +82,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '旧昵称: ${authState.username}',
+              '旧昵称: ${authState.nickname}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),

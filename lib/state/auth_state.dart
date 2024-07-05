@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState with ChangeNotifier {
   String? _username;
   String? _avatarPath;
+  String? _nickname;
   bool _isLoggedIn;
   bool _isAdmin;
-  List<Map<String, dynamic>> _userLogins;  //dynamic值可为任意类型
+  List<Map<String, dynamic>> _userLogins;
 
   AuthState()
       : _isLoggedIn = false,
@@ -19,17 +19,20 @@ class AuthState with ChangeNotifier {
 
   String? get username => _username;
   String? get avatarPath => _avatarPath;
+  String? get nickname => _nickname;
   bool get isLoggedIn => _isLoggedIn;
   bool get isAdmin => _isAdmin;
   List<Map<String, dynamic>> get userLogins => _userLogins;
 
   Future<void> _loadUser() async {
-    //获得实例，读取数据
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _username = prefs.getString('username');
-    _avatarPath = prefs.getString('avatarPath');
-    _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    _isAdmin = _username == 'admin'; //???这里需要修改一下
+    if (_username != null) {
+      _avatarPath = prefs.getString('avatarPath_$_username');
+      _nickname = prefs.getString('nickname_$_username') ?? _username; // 使用用户名作为默认昵称
+      _isLoggedIn = prefs.getBool('isLoggedIn_$_username') ?? false;
+      _isAdmin = _username == 'admin';
+    }
 
     List<String>? userLoginsList = prefs.getStringList('userLogins');
     if (userLoginsList != null) {
@@ -38,7 +41,7 @@ class AuthState with ChangeNotifier {
           .toList();
     }
 
-    notifyListeners(); //通知监听器
+    notifyListeners();
   }
 
   Future<void> register(String username, String password) async {
@@ -55,7 +58,7 @@ class AuthState with ChangeNotifier {
       _isAdmin = true;
       _isLoggedIn = true;
       await prefs.setString('username', 'admin');
-      await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isLoggedIn_admin', true);
       notifyListeners();
       return true;
     }
@@ -65,7 +68,7 @@ class AuthState with ChangeNotifier {
       _isLoggedIn = true;
       _isAdmin = username == 'admin';
       await prefs.setString('username', username);
-      await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isLoggedIn_$username', true);
 
       _userLogins.add({
         'username': username,
@@ -76,6 +79,8 @@ class AuthState with ChangeNotifier {
         _userLogins.map((log) => jsonEncode(log)).toList(),
       );
 
+      await _loadUser(); // 加载用户信息
+
       notifyListeners();
       return true;
     }
@@ -84,22 +89,30 @@ class AuthState with ChangeNotifier {
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_username != null) {
+      await prefs.remove('username');
+      await prefs.remove('isLoggedIn_$_username');
+      await prefs.remove('avatarPath_$_username');
+      await prefs.remove('nickname_$_username');
+    }
     _username = null;
     _isLoggedIn = false;
     _isAdmin = false;
-    await prefs.remove('username');
-    await prefs.remove('isLoggedIn');
-    await prefs.remove('avatarPath');
     notifyListeners();
   }
 
   Future<List<Map<String, String>>> getAllUsers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Set<String> keys = prefs.getKeys(); //获取 SharedPreferences 中所有的键
+    Set<String> keys = prefs.getKeys();
     List<Map<String, String>> users = [];
     for (var key in keys) {
-      if (key != 'username' && key != 'isLoggedIn' && key != 'truthQuestions' && key != 'userLogins') {
-        users.add({key: prefs.getString(key) ?? ' '});//if判定条件有问题
+      if (key != 'username' &&
+          !key.startsWith('isLoggedIn_') &&
+          !key.startsWith('avatarPath_') &&
+          !key.startsWith('nickname_') &&
+          key != 'truthQuestions' &&
+          key != 'userLogins') {
+        users.add({key: prefs.getString(key) ?? ''});
       }
     }
     return users;
@@ -114,15 +127,20 @@ class AuthState with ChangeNotifier {
 
   Future<void> setAvatar(String avatarPath) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _avatarPath = avatarPath;
-    await prefs.setString('avatarPath', avatarPath);
-    notifyListeners();
+    if (_username != null) {
+      _avatarPath = avatarPath;
+      await prefs.setString('avatarPath_$_username', avatarPath);
+      notifyListeners();
+    }
   }
 
-  // 新增方法：更新头像
-  void updateAvatar(String imagePath) {
-    _avatarPath = imagePath;
-    notifyListeners(); // Notify listeners that avatar path has changed
+  Future<void> setNickname(String nickname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_username != null) {
+      _nickname = nickname;
+      await prefs.setString('nickname_$_username', nickname);
+      notifyListeners();
+    }
   }
 }
 

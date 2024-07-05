@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +23,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? imagePath = prefs.getString('imagePath');
+    var authState = Provider.of<AuthState>(context, listen: false);
+    String? imagePath = prefs.getString('avatarPath_${authState.username}');
     setState(() {
       if (imagePath != null && imagePath.isNotEmpty) {
         _avatarImage = FileImage(File(imagePath)); // 使用 FileImage 加载图片
@@ -36,7 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _saveImagePath(String imagePath) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('imagePath', imagePath);
+    var authState = Provider.of<AuthState>(context, listen: false);
+    prefs.setString('avatarPath_${authState.username}', imagePath);
   }
 
   void _updateSelectedImage(File image) {
@@ -65,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(width: 20),
                 Expanded(
                   child: Text(
-                    '用户名: ${authState.username}', // 显示用户名
+                    '昵称: ${authState.nickname}', // 显示用户名
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -83,8 +84,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/change_nickname');
+                    onPressed: () async {
+                      final result = await Navigator.pushNamed(context, '/change_nickname');
+                      if (result != null && result is String) {
+                        authState.setNickname(result); // 更新昵称并通知UI
+                      }
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
