@@ -132,7 +132,7 @@ class _addTruthScreenState extends State<addTruthScreen>{
               ),
               SizedBox(height: 20),
               Text(
-                '大冒险列表',
+                '真心话列表',
                 style: TextStyle(
                   fontFamily: "Font3",
                   fontSize: 24,
