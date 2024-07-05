@@ -30,7 +30,10 @@
 #### 2.2.1 本地存储化
 如AuthState类通过ChangeNotifier实现了一个简单的用户认证和状态管理系统，使用SharedPreferences来进行本地存储。
 
-#### 2.2.2 真心话大冒险页面设计
+#### 2.2.2 远程数据读取
+如instructionScreen类通过调用dio库实现了软件说明文本数据的远程读取，数据从https://hyyellowwin.github.io/random-selection-data/中调取得到，再通过dart:html库对html文件进行解析，完成了远程数据的读取与可视化。
+
+#### 2.2.3 真心话大冒险页面设计
 使用Provider状态管理、SharedPreferences本地存储、AnimatedTextKit动画效果以及CustomTextField和CustomButton自定义组件，创建了一个功能完善且具有动态效果的“大冒险”界面。
 
 主要实现了以下功能：
@@ -40,7 +43,7 @@
 4. 状态管理：通过Provider管理大冒险挑战的状态，确保数据在应用不同部分之间的一致性。
 5. 本地存储：使用SharedPreferences实现用户数据和挑战记录的持久化存储。
 
-#### 2.2.3 app主页的设计
+#### 2.2.2 app主页的设计
 通过使用Provider状态管理、Swiper图片轮播、GNav底部导航栏以及自定义按钮组件，创建了一个功能完善且具有动态效果的主界面。
 
 主要实现了以下功能：
@@ -64,6 +67,9 @@
   │   ├── router
   │   │   ├── router.dart
   │   ├── screens
+  │   │   ├── add_dare.dart
+  │   │   ├── add_dare.dart
+  │   │   ├── add_truth.dart
   │   │   ├── admin_screen.dart
   │   │   ├── change_name_screen.dart
   │   │   ├── change_password_screen.dart
@@ -72,6 +78,7 @@
   │   │   ├── dare_screen.dart
   │   │   ├── history_screen.dart
   │   │   ├── home_screen.dart
+  │   │   ├── instructin_for_app_screen.dart
   │   │   ├── login_screen.dart
   │   │   ├── manage_questions_screen.dart
   │   │   ├── my_themes_screen.dart
