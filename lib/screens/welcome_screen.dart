@@ -7,7 +7,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   double _slidePosition = 0.0;
-  double _maxSlideDistance = 333.0; // 调整最大滑动距离
+  double _maxSlideDistance = 300.0; // 调整最大滑动距离
   bool _isUnlocked = false;
 
   @override
