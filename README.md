@@ -31,7 +31,7 @@
 如AuthState类通过ChangeNotifier实现了一个简单的用户认证和状态管理系统，使用SharedPreferences来进行本地存储。
 
 #### 2.2.2 远程数据读取
-如instructionScreen类通过调用dio库实现了软件说明文本数据的远程读取，数据从https://hyyellowwin.github.io/random-selection-data/中调取得到，再通过dart:html库对html文件进行解析，完成了远程数据的读取与可视化。
+如instructionScreen类通过调用dio库实现了软件说明文本数据的远程读取，数据从https://hyyellowwin.github.io/random-selection-data/  中调取得到，再通过dart:html库对html文件进行解析，完成了远程数据的读取与可视化。
 
 #### 2.2.3 真心话大冒险页面设计
 使用Provider状态管理、SharedPreferences本地存储、AnimatedTextKit动画效果以及CustomTextField和CustomButton自定义组件，创建了一个功能完善且具有动态效果的“大冒险”界面。
@@ -67,7 +67,7 @@
   │   ├── router
   │   │   ├── router.dart
   │   ├── screens
-  │   │   ├── add_dare.dart
+  │   │   ├── RoulettePage.dart
   │   │   ├── add_dare.dart
   │   │   ├── add_truth.dart
   │   │   ├── admin_screen.dart
